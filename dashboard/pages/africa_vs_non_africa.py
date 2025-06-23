@@ -4,6 +4,7 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.colors import qualitative
+import os
 
 st.set_page_config(layout="wide")
 st.markdown(
@@ -33,10 +34,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+path = os.path.join(os.path.dirname(__file__), "..", "..", "data", "raw", "litigation_cases.xlsx")
 
 @st.cache_data
 def load_data():
-    return pd.read_excel("../data/raw/litigation_cases.xlsx",
+    return pd.read_excel(path,
                          skiprows=5, skipfooter=7)
 
 df = load_data()

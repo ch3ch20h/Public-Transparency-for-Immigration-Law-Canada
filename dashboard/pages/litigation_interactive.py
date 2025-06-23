@@ -16,7 +16,7 @@ df = pd.read_excel(
     skiprows=5, skipfooter=7
 )
 
-st.title("📊 Litigation Cases Dashboard")
+st.title("Litigation Application Dashboard")
 
 # --- Filters in Sidebar (Always visible) ---
 st.sidebar.header("🔎 Filter Options")
@@ -40,22 +40,30 @@ filtered_df = filtered_df[
     (filtered_df["LIT Leave Decision Date - Year"] <= years[1])
 ]
 
-# --- Summary Card (Litigation Count Only, Styled) ---
+# --- Summary Metrics ---
 litigation_total = filtered_df["LIT Litigation Count"].sum()
+selected_country_count = len(countries) if countries else df["Country of Citizenship"].nunique()
+year_range = f"{years[0]} - {years[1]}"
 
-# Custom CSS to beautify the metric
+# --- Custom CSS for Consistent Metric Styling ---
 st.markdown("""
     <style>
+    .summary-container {
+        display: flex;
+        justify-content: space-around;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
     .summary-box {
         background-color: #f9f9fc;
         border-radius: 12px;
         padding: 30px 20px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         text-align: center;
-        margin-bottom: 20px;
+        flex: 1;
     }
     .summary-box h2 {
-        font-size: 1.5em;
+        font-size: 1.3em;
         margin: 0;
         color: #333;
     }
@@ -68,10 +76,21 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# --- Display All Summary Boxes in One Row ---
 st.markdown(f"""
-<div class="summary-box">
-    <h2>Total Litigation Count</h2>
-    <div class="count">{litigation_total:,}</div>
+<div class="summary-container">
+    <div class="summary-box">
+        <h2>Total Litigation Count</h2>
+        <div class="count">{litigation_total:,}</div>
+    </div>
+    <div class="summary-box">
+        <h2>Countries Selected</h2>
+        <div class="count">{selected_country_count}</div>
+    </div>
+    <div class="summary-box">
+        <h2>Selected Year Range</h2>
+        <div class="count">{year_range}</div>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
