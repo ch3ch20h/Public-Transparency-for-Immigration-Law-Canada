@@ -33,7 +33,6 @@ fig1 = px.bar(
     country_counts,
     x="country",
     y="count",
-    title="Top 10 Countries by Total A34(1) Refusals (2019–2024)",
     text_auto=True
 )
 st.plotly_chart(fig1, use_container_width=True)
