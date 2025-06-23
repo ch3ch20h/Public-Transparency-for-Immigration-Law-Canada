@@ -15,7 +15,6 @@ Welcome to the Immigration Insights Dashboard. This dashboard presents data-driv
 # Data Story 1 (Coming Soon)
 st.subheader("Data Story 1: Grounds for Refusal of Immigration Applications")
 st.markdown("""
-*(Coming Soon)*  
 Based on the dataset:
 > *"A34 (1) Refusal Grounds for Temporary and Permanent Resident Applications (2019–2024)"*
 
@@ -24,6 +23,7 @@ This section will explore:
 - The **primary grounds for inadmissibility**, such as security concerns or misrepresentation.
 - Yearly trends in refusal rates.
 """)
+st.page_link("a34_story.py", label="👉 Go to Grounds for Refusal of Immigration Applications")
 
 # Data Story 2
 st.subheader("Data Story 2: Litigation Outcomes by Region")
@@ -36,7 +36,7 @@ This section analyzes:
 - Potential **biases** in how litigation decisions are distributed across different regions.
 - Key trends by regions (Africa, Asia, North America, Caribbean).
 """)
-st.page_link("africa_vs_non_africa.py", label="👉 Go to Region Litigation Application")
+st.page_link("africa_vs_non_africa.py", label="👉 Go to Litigation Outcomes by Region")
 
 # Data Story 3
 st.subheader("Data Story 3: Country-Level Case Type & Outcome Analysis")
@@ -46,7 +46,7 @@ Also using the litigation dataset above, this section dives deeper into:
 - A comparative view of case types and outcomes (e.g., RAD, HC, Visa Officer Refusals).
 - How litigation pathways differ by country of citizenship.
 """)
-st.page_link("litigation_dashboard.py", label="👉 Go to Top 4 Countries Litigation Application")
+st.page_link("litigation_dashboard.py", label="👉 Go to Country-Level Case Type & Outcome Analysis")
 
 # Refusals Explorer
 st.subheader("Interactive Dashboard: Refusals Explorer")
