@@ -409,10 +409,7 @@ else:
                 color_discrete_sequence=px.colors.qualitative.Set3
             )
             fig_treemap.update_traces(textinfo="label+value+percent entry",
-                                      textfont=dict(color="black"),
-                                      hovertemplate='<b>Country:</b> %{label}<br>'
-                                                    '<b>Count:</b> %{value:,}<br>'
-                                                    '<b>Percent of Entry:</b> %{percentEntry:.2%}<extra></extra>')
+                                      textfont=dict(color="black"))
             fig_treemap.update_layout(height=600)
             st.plotly_chart(fig_treemap, use_container_width=True)
             
@@ -476,10 +473,7 @@ else:
                 color_discrete_sequence=px.colors.qualitative.Set3
             )
             fig_treemap.update_traces(textinfo="label+value+percent entry",
-                                      textfont=dict(color="black"),
-                                      hovertemplate='<b>Country:</b> %{label}<br>'
-                                                    '<b>Count:</b> %{value:,}<br>'
-                                                    '<b>Percent of Entry:</b> %{percentEntry:.2%}<extra></extra>')
+                                      textfont=dict(color="black"))
             fig_treemap.update_layout(height=600)
             st.plotly_chart(fig_treemap, use_container_width=True)
           # Add donut chart for resident comparison
