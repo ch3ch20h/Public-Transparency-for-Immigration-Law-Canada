@@ -99,7 +99,7 @@ st.markdown(f"""
 top_countries = filtered_df.groupby("Country of Citizenship")["LIT Litigation Count"].sum().reset_index()
 fig = px.choropleth(top_countries, locations="Country of Citizenship", locationmode="country names",
                     color="LIT Litigation Count", hover_name="Country of Citizenship",
-                    color_continuous_scale="Reds", title="🌍 Litigation Count by Country of Citizenship")
+                    color_continuous_scale="Reds", title="Litigation Count by Country of Citizenship")
 fig.update_layout(geo=dict(showframe=False, projection_type='natural earth'))
 st.plotly_chart(fig, use_container_width=True)
 
@@ -166,7 +166,7 @@ if len(countries) > 1 and len(case_types) > 1:
 
     fig.update_layout(
         height=700,
-        title_text="📊 Litigation Trends per Country and Case Type",
+        title_text="Litigation Trends per Country and Case Type",
         barmode="stack"
     )
     st.plotly_chart(fig, use_container_width=True)

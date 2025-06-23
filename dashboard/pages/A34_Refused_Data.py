@@ -215,8 +215,7 @@ if no_filters_selected:
             inadmiss_data,
             x='inadmissibility_grounds',
             y='count',
-            title='Total Refusals by Inadmissibility Grounds',
-            color_discrete_sequence=['#1f77b4']
+            title='Total Refusals by Inadmissibility Grounds'
         )
         fig_inadmiss.update_layout(
             xaxis_title="Inadmissibility Grounds",
@@ -233,8 +232,7 @@ if no_filters_selected:
             country_counts,
             x='country',
             y='count',
-            title='Top 10 Countries by Total Refusals',
-            color_discrete_sequence=['#1f77b4']
+            title='Top 10 Countries by Total Refusals'
         )
         fig_countries.update_layout(
             xaxis_title="Country",
@@ -575,8 +573,7 @@ else:
                         country_data,
                         x='country',
                         y='count',
-                        title='Top 10 Countries',
-                        color_discrete_sequence=['#1f77b4']
+                        title='Top 10 Countries'
                     )
                     fig_bar.update_layout(xaxis_tickangle=-45)
                     st.plotly_chart(fig_bar, use_container_width=True)
