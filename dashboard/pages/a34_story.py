@@ -72,7 +72,7 @@ fig3 = px.treemap(
     values="count",
     hover_data=["count"]
 )
-fig3.update_traces(textinfo="label+value+percent entry")
+fig3.update_traces(textinfo="label+value")
 fig3.update_layout(
     width=1400,
     height=800
