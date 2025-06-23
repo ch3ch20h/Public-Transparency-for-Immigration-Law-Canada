@@ -48,4 +48,5 @@ For IRCC Litigation Applications from 2018 to 2023, we observed the following is
 IRCC should include these office details.
 
 ![Distribution of leave decision outcomes](../img/figure_2.png) 
+
 ![Litigation Applications by Decision Office](../img/Unspecific.png)
