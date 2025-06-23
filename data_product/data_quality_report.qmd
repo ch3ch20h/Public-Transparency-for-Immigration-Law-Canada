@@ -16,7 +16,6 @@ number-sections: true
 execute:
   echo: false
   warning: false
-bibliography: references.bib
 format-links: false
 ---
 
@@ -24,12 +23,21 @@ format-links: false
 
 ## IRCC A34(1)Refusals dataset
 
-For the IRCC A34(1) Refusals dataset (2019–2024), we noticed that the number of refusals for temporary residents under A34(1) is zero (see Figure 1), and we are not sure whether this reflects an actual absence of refusals or missing entries. In addition, we cannot detect potential biases without a more detailed breakdown of temporary-resident categories such as student visa holders, work permit holders, and visitor visa holders. Moreover, we cannot determine whether the refusals were issued by a visa officer, the Immigration Appeal Division, or the Federal Court due to the lack of a “decision_authority” field. It is also unclear whether these recorded refusals represent final decisions or if they may have been overturned on appeal. The dataset provides no accompanying metadata or data dictionary to clarify field definitions.
+For the IRCC A34(1) Refusals dataset (2019–2024), we noticed that:
 
-![Figure 1](../img/data_missing_example.png)
+1.  The number of refusals for temporary residents under A34(1) is zero (see Figure 1), and we are not sure whether this reflects an actual absence of refusals or missing entries. Due to low counts of refusal we are not able to statistically test the biases and perform any causal inference.
+2.  We cannot determine whether the refusals were issued by a visa officer, the Immigration Appeal Division, or the Federal Court due to the lack of a “decision_authority” field. It is also unclear whether these recorded refusals represent final decisions or if they may have been overturned on appeal. The dataset provides no accompanying metadata or data dictionary to clarify field definitions.
+3.  The country names are inconsistent, such as Congo appears alongside the Democratic Republic of the Congo.
+
+![Absence of A34(1) Refusals in All Temporary Resident Categories](../img/data_missing_example.png)
 
 ## IRCC Litigation Applications dataset
 
-For IRCC Litigation Applications from 2018 to 2023, we are uncertain about the meanings of terms such as “dismissed at leave” and “withdrawn at leave” because they are not clearly defined, making outcome comparisons impossible. We also cannot confirm whether all refugee cases are captured under RAD/RPD decisions or whether they may appear in Mandamus, Removal Orders, or other categories. Case-type categories include RAD, IAD, HC, Mandamus, and visa-officer refusals, but none are linked to refugee versus non-refugee status or to permanent versus temporary residency, and most entries lack a “primary_decision_office” designation. Furthermore, only decision dates are recorded, while filing dates and original application dates are missing, so we cannot assess processing times. Also, as shown in Figure 2, a large proportion of litigation cases are attributed to “Unspecified” primary decision offices, which prevents meaningful insight into office-level counts. IRCC should include these office details. Finally, country names are inconsistent, such as Congo appears alongside the Democratic Republic of the Congo.
+For IRCC Litigation Applications from 2018 to 2023, we are uncertain about:
 
-![Figure 2](../img/Unspecific.png)
+1.  The meanings of terms such as “dismissed at leave” and “withdrawn at leave” because they are not clearly defined, making outcome comparisons impossible.
+2.  We also cannot confirm whether all refugee cases are captured under RAD/RPD decisions or whether they may appear in Mandamus, Removal Orders, or other categories. Case-type categories include RAD, IAD, HC, Mandamus, and visa-officer refusals, but none are linked to refugee versus non-refugee status or to permanent versus temporary residency, and most entries lack a “primary_decision_office” designation.
+3.  Only decision dates are recorded, while filing dates and original application dates are missing, so we cannot assess processing times.
+4.  As shown in Figure 2, a large proportion of litigation cases are attributed to “Unspecified” primary decision offices, which prevents meaningful insight into office-level counts. IRCC should include these office details.
+
+![Litigation Applications by Decision Office](../img/Unspecific.png)
