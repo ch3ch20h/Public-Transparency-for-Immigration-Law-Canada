@@ -88,8 +88,14 @@ if filtered_df.empty:
 else:
     # --- Summary Metrics ---
     litigation_total = filtered_df["LIT Litigation Count"].sum()
-    selected_country_count = len(countries) if countries else df["Country of Citizenship"].nunique()
     year_range = f"{years[0]} - {years[1]}"
+    if countries:
+        if len(countries) > 2:
+            selected_country_names = ", ".join(countries[:2]) + f", +{len(countries)-2} more"
+        else:
+            selected_country_names = ", ".join(countries)
+    else:
+        selected_country_names = "All Countries"
 
     # --- Custom CSS for Consistent Metric Styling ---
     st.markdown("""
@@ -131,7 +137,7 @@ else:
         </div>
         <div class="summary-box">
             <h2>Countries Selected</h2>
-            <div class="count">{selected_country_count}</div>
+            <div class="count">{selected_country_names}</div>
         </div>
         <div class="summary-box">
             <h2>Selected Year Range</h2>
@@ -151,7 +157,7 @@ else:
 
     # --- Custom Composite Visualization for Multiple Countries and Multiple Case Types ---
     if len(countries) > 1 and len(case_types) > 1:
-        color_palette = px.colors.qualitative.Pastel
+        color_palette = px.colors.qualitative.D3
         selected_case_types = case_types
         color_map = dict(zip(selected_case_types, color_palette[:len(selected_case_types)]))
         selected_countries = countries
@@ -191,7 +197,6 @@ else:
                     orientation='h',
                     text=[str(int(total_counts.get(case_type, 0)))],
                     textposition='outside',
-                    textfont=dict(color='black'),
                     marker=dict(color=color_map[case_type]),
                     showlegend=(col_idx == 1)
                 ), row=1, col=col_idx)
@@ -205,7 +210,6 @@ else:
                     orientation='h',
                     text=pivot_df[case_type],
                     textposition='outside',
-                    textfont=dict(color='black'),
                     marker=dict(color=color_map[case_type]),
                     showlegend=False
                 ), row=2, col=col_idx)

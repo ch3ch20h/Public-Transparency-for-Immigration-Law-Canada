@@ -148,8 +148,8 @@ if filtered_df['count'].sum() == 0:
 # --- Summary Metrics ---
 total_cases = filtered_df['count'].sum()
 year_range = f"{selected_years[0]} - {selected_years[1]}"
+selected_country_names = "".join(selected_country) if selected_country else "All Countries"
 
-# --- Custom CSS for Consistent Metric Styling ---
 st.markdown("""
     <style>
     .summary-container {
@@ -157,6 +157,7 @@ st.markdown("""
         justify-content: space-around;
         gap: 20px;
         margin-bottom: 30px;
+        flex-wrap: wrap;
     }
     .summary-box {
         background-color: #f9f9fc;
@@ -165,6 +166,7 @@ st.markdown("""
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         text-align: center;
         flex: 1;
+        min-width: 250px;
     }
     .summary-box h2 {
         font-size: 1.3em;
@@ -172,24 +174,33 @@ st.markdown("""
         color: #333;
     }
     .summary-box .count {
-        font-size: 2.5em;
+        font-size: 2.2em;
         font-weight: bold;
         color: #2b8cd6;
         margin-top: 10px;
     }
+    .summary-box .label {
+        font-size: 1em;
+        color: #555;
+        margin-top: 6px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# --- Display All Summary Boxes in One Row ---
+# --- Display the Summary Metrics ---
 st.markdown(f"""
 <div class="summary-container">
     <div class="summary-box">
-        <h2>Total Refusals</h2>
+        <h2>Total Cases</h2>
         <div class="count">{total_cases:,}</div>
     </div>
     <div class="summary-box">
         <h2>Selected Year Range</h2>
         <div class="count">{year_range}</div>
+    </div>
+    <div class="summary-box">
+        <h2>Countries Selected</h2>
+        <div class="count">{selected_country_names}</div>
     </div>
 </div>
 """, unsafe_allow_html=True)
