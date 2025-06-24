@@ -41,7 +41,9 @@ def load_data():
 
 lit = load_data()
 
-st.title("Litigation Case Dashboard")
+
+st.set_page_config(layout="wide")
+st.title("Country-Level Case Type & Outcome Analysis")
 
 # ===== Section 1 =====
 st.header("Overview of Top Countries and Litigation Trends")
