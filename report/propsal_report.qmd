@@ -16,7 +16,7 @@ number-sections: true
 execute:
   echo: false
   warning: false
-bibliography: references.bib
+bibliography: references_proposal.bib
 format-links: false
 ---
 
