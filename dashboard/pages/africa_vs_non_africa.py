@@ -35,7 +35,7 @@ continent_colors = {
     "Oceania":       "#f39c12",
     "Unspecified":   "#7f8c8d",
 }
-st.markdown('<div class="large-title">Litigation Outcomes by Region</div>', unsafe_allow_html=True)
+st.markdown('# Litigation Outcomes by Region', unsafe_allow_html=True)
 st.markdown(
     '<div class="subtitle">'
     'This dashboard is aimed at uncovering patterns of dismissed rates across '
@@ -215,7 +215,7 @@ fig.update_yaxes(showgrid=False, secondary_y=True)
 
 st.plotly_chart(fig, use_container_width=True)
 
-st.markdown("👉We've compared each regions's total cases and dismissed rates, now let's see how they differ from the global average.")
+st.markdown("👉We've compared each region's total cases and dismissed rates, now let's see how they differ from the global average.")
 st.header("Overall Dismissal Rate Difference vs Global")
 st.markdown(f"""
 - <span style="color:{continent_colors['Caribbean']}">Caribbean</span> dismissal rates exceed the world average by **+16.3 pp**, the largest gap of any region.  
@@ -344,8 +344,8 @@ cmp = cmp[cmp[cont_col].isin(keep_conts)].sort_values([cont_col, year_col])
 cmp['share_pct']     = cmp['cont_total']   / cmp['global_total'] * 100
 cmp['remainder_pct'] = 100 - cmp['share_pct']
 
-n    = len(keep_conts)
-cols =2
+n = len(keep_conts)
+cols = 2
 rows = (n + cols - 1) // cols
 
 fig = make_subplots(
