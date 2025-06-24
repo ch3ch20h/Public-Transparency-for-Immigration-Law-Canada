@@ -35,7 +35,7 @@ continent_colors = {
     "Oceania":       "#f39c12",
     "Unspecified":   "#7f8c8d",
 }
-st.markdown('<div class="large-title">Litigation Cases by Region</div>', unsafe_allow_html=True)
+st.markdown('<div class="large-title">Litigation Outcomes by Region</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="subtitle">'
     'This dashboard is aimed at uncovering patterns of dismissed rates across '
