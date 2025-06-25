@@ -4,6 +4,7 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.colors import qualitative
+import os
 
 st.set_page_config(layout="wide")
 
@@ -39,7 +40,7 @@ st.markdown('# Litigation Outcomes by Region', unsafe_allow_html=True)
 st.markdown(
     '<div class="subtitle">'
     'This dashboard is aimed at uncovering patterns of dismissed rates across '
-    'continents to evaluate potential Anti-African/Black racism in litigation outcomes.'
+    'regions to evaluate potential Anti-African/Black racism in litigation outcomes.'
     '</div>',
     unsafe_allow_html=True
 )
@@ -47,8 +48,8 @@ st.markdown(
 
 @st.cache_data
 def load_data():
-    return pd.read_excel("../../data/raw/litigation_cases.xlsx",
-                         skiprows=5, skipfooter=7)
+    path = os.path.join(os.path.dirname(__file__), "..", "..", "data", "raw", "litigation_cases.xlsx")
+    return pd.read_excel(path, skiprows=5, skipfooter=7)
 
 df = load_data()
 df['LIT Leave Decision Desc'] = (
@@ -166,9 +167,10 @@ else:
 
 st.header("Total Litigation Applications vs Dismissed Rate by Region")
 st.markdown(f"""
-- <span style="color:{continent_colors['Africa']}">Africa</span> handles the **second-highest volume (~13 400 cases)** but its **dismissed rate (56.5 %)** is well above the global average.  
-- <span style="color:{continent_colors['Caribbean']}">Caribbean</span> tops the list with a **67.7 % dismissed rate**, despite handling only about **2 560 cases**.  
-- <span style="color:{continent_colors['South America']}">South America</span> and <span style="color:{continent_colors['Europe']}">Europe</span> both have **mid-range volumes** but **lower dismissed rates (~47.5 – 49.9 %)**, highlighting that African and Caribbean cases are treated more punitively.
+- <span style="color:{continent_colors['Asia']}">Asia</span> processes the **highest volume of cases (~22,908)**, yet its **dismissal rate (45.9%)** remains **below the global average**.  
+- <span style="color:{continent_colors['Africa']}">Africa</span> handles the **second-highest volume (~13,400 cases)** but its **dismissal rate (56.5%)** is well above the global average.  
+- <span style="color:{continent_colors['Caribbean']}">Caribbean</span> tops the list with a **67.7% dismissal rate**, despite handling only about **2,560 cases**.  
+- <span style="color:{continent_colors['South America']}">South America</span> and <span style="color:{continent_colors['Europe']}">Europe</span> both have **mid-range volumes** but **lower dismissal rates (~47.5–49.9%)**, highlighting that African and Caribbean cases are treated more punitively.
 """, unsafe_allow_html=True)
 
 st.info("""
@@ -206,10 +208,11 @@ fig.add_trace(
     go.Bar(
         x=cont_df['continent'],
         y=cont_df['total_cases'],
-        name='Decided Cases',
+        name='Litigation Application',
         marker_color=bar_colors,
         text=cont_df['total_cases'],
-        textposition='inside'
+        textposition='inside',
+        showlegend=False
     ),
     secondary_y=False
 )
@@ -219,7 +222,7 @@ fig.add_trace(
         x=cont_df['continent'],
         y=cont_df['refusal_rate'],
         mode='lines+markers+text',
-        name='Refusal Rate (%)',
+        name='Dismissal Rate (%)',
         text=cont_df['refusal_rate'].round(1).astype(str) + '%',
         textposition='top center',
         line=dict(color='black'),
@@ -272,7 +275,7 @@ st.markdown("👉We've compared each region's total litigation applications and 
 st.header("Overall Dismissal Rate Difference (Δ) vs Global")
 st.markdown(f"""
 - <span style="color:{continent_colors['Caribbean']}">Caribbean</span> dismissal rates exceed the world average by **+16.3 pp**, the largest gap of any region.  
-- <span style="color:{continent_colors['North America']}">North America</span> is **+8.6 pp** and <span style="color:{continent_colors['Africa']}">Africa</span> **+5.1 pp** above global, confirming a systematic elevation.  
+- <span style="color:{continent_colors['North and Central America']}">North and Central America</span> is **+8.6 pp** and <span style="color:{continent_colors['Africa']}">Africa</span> **+5.1 pp** above global, confirming a systematic elevation.  
 - By contrast, <span style="color:{continent_colors['Asia']}">Asia</span>, <span style="color:{continent_colors['Europe']}">Europe</span> and <span style="color:{continent_colors['South America']}">South America</span> fall below global (–5.6 pp to –1.5 pp), underscoring the specific disadvantage faced by Applicants of African descent.
 """, unsafe_allow_html=True)
 
@@ -330,8 +333,6 @@ fig.update_layout(
 
 st.plotly_chart(fig, use_container_width=True)
 
-st.markdown("👉Focusing on the three regions whose overall dismissed rates exceed the global average, let's explore how their other leave decision categories (Allowed, Discontinued) compare.")
-st.header("3. Leave Decision % Δ vs Global by Continent")
 st.markdown(f"""
 👉Focusing on the three regions whose <strong>dismissal rates</strong> exceed the global average, <span style="color:{continent_colors['Africa']}"><strong>Africa</strong></span>, 
 <span style="color:{continent_colors['Caribbean']}"><strong>the Caribbean</strong></span>, and 
@@ -389,7 +390,7 @@ glob = (
 glob['pct_global'] = glob['global_count'] / glob['global_count'].sum() * 100
 cont = cont.merge(glob[['LIT Leave Decision Desc','pct_global']], on='LIT Leave Decision Desc')
 cont['diff'] = cont['pct_cont'] - cont['pct_global']
-sel = cont[cont['continent'].isin(['Asia','Africa','North America','Caribbean'])]
+sel = cont[cont['continent'].isin(['Asia','Africa','North and Central America','Caribbean'])]
 sel = sel[~sel['LIT Leave Decision Desc'].isin(['Not Started at Leave','No Leave Required','Leave Exception'])]
 
 fig = px.bar(
@@ -493,17 +494,7 @@ for i, cont_name in enumerate(keep_conts):
             marker_color=continent_colors[cont_name],
             text=sub['cont_total'],
             textposition='inside',
-            showlegend=(i==0)
-        ),
-        row=row, col=col, secondary_y=False
-    )
-    fig.add_trace(
-        go.Bar(
-            x=sub[year_col],
-            y=sub['remainder_pct'],
-            name='Other share',
-            marker_color='#cccccc',
-            showlegend=(i==0)
+            showlegend=False
         ),
         row=row, col=col, secondary_y=False
     )
@@ -529,7 +520,6 @@ for i, cont_name in enumerate(keep_conts):
             x=sub[year_col],
             y=sub['global_rate'],
             name='Global dismissed rate',
-            mode='lines+markers+text',
             text=sub['global_rate'].round(1).astype(str) + '%',
             textposition='bottom center',
             line=dict(color='black', dash='dash'),
@@ -688,8 +678,11 @@ color_map = color_map
 fig = make_subplots(rows=1, cols=4, shared_yaxes=True)
 
 for i, cont_name in enumerate(selected):
-    sub = agg_f[agg_f['continent']==cont_name]
-    pivot = sub.pivot_table(index='LIT Leave Decision Date - Year', columns='LIT Case Type Group Desc', values='LIT Litigation Count', fill_value=0)
+    sub = agg_f[agg_f['continent'] == cont_name]
+    pivot = sub.pivot_table(index='LIT Leave Decision Date - Year',
+                            columns='LIT Case Type Group Desc',
+                            values='LIT Litigation Count',
+                            fill_value=0)
     years = pivot.index.tolist()
     for ct in case_types:
         if ct in pivot.columns:
@@ -801,22 +794,30 @@ for cont_name in ['Africa', 'North and Central America', 'Caribbean', 'Asia']:
         .sort_values('LIT Litigation Count', ascending=False)
         .head(10)
     )
+
+    country_colors = [
+        highlight_colors.get(country, "#cccccc") for country in pc['Country of Citizenship']
+    ]
+
     fig = px.pie(
         pc,
         names='Country of Citizenship',
         values='LIT Litigation Count',
         title=f'{cont_name}: Top 10 Countries by Case Volume',
         hole=0.4,
-        color_discrete_sequence=[continent_colors[cont_name]] + ["#cccccc"]*(len(pc)-1)
+        color_discrete_sequence=country_colors
     )
+
     fig.update_traces(
         textinfo='percent+label',
         textposition='outside',
         automargin=True,
         hovertemplate="<b>%{label}</b><br>Cases: %{value}<br>Percentage: %{percent}<extra></extra>"
     )
+
     fig.update_layout(
         margin=dict(t=40, b=40, l=40, r=40),
         showlegend=False
     )
+
     st.plotly_chart(fig, use_container_width=True)

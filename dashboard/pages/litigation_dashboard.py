@@ -26,7 +26,7 @@ CASE_TYPE_COLOR_MAP = {
 @st.cache_data
 def load_data():
     path = os.path.join(os.path.dirname(__file__), "..", "..", "data", "raw", "litigation_cases.xlsx")
-    lit = pd.read_excel(path, sheet_name="Final", skiprows=5)
+    lit = pd.read_excel(path, skiprows=5, skipfooter=7)
     lit["Year"] = lit["LIT Leave Decision Date - Year"]
 
     lit['LIT Leave Decision Desc'] = lit['LIT Leave Decision Desc'].replace(
