@@ -16,7 +16,7 @@ number-sections: true
 execute:
   echo: false
   warning: false
-bibliography: references_final.bib
+bibliography: references.bib
 format-links: false
 ---
 
@@ -34,15 +34,13 @@ Inadmissibility[^1] decisions issued by Immigration, Refugees and Citizenship Ca
 
 ## Why This Matters
 
-Our project partner, **Heron Law Office**, frequently represents individuals facing inadmissibility[^2] and litigates immigration decisions in federal court. The firm has identified several concerns, including:
-
-[^2]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
+Our project partner, **Heron Law Office**, frequently represents individuals facing inadmissibility and litigates immigration decisions in federal court. The firm has identified several concerns, including:
 
 -   The potential role of **geopolitical influence** (e.g., cases from Ukraine, Syria, China, Iran)
--   Patterns suggesting **anti-Black and anti-African bias**, reflected in disproportionately high dismissal rates[^3] from African and Caribbean countries
+-   Patterns suggesting **anti-Black and anti-African bias**, reflected in disproportionately high dismissal rates[^2] from African and Caribbean countries
 -   Gaps and inconsistencies in the released data that limit legal interpretability and policy reform.
 
-[^3]: “Dismissal rate”: the number of cases dismissed at the Leave stage divided by the total number of Leave applications.
+[^2]: “Dismissal rate”: the number of cases dismissed at the Leave stage divided by the total number of Leave applications.
 
 These challenges are compounded by IRCC’s growing reliance on **Advanced Analytics** for decision-making, which further raises the stakes for transparency and oversight.
 
@@ -52,21 +50,16 @@ Our project aims to improve data accessibility, clarity, and interpretability by
 
 ## Data Sources
 
-When a person applies for a visa or permanent residency in Canada, IRCC first issues an inadmissibility[^4] decision under A34(1)[^5]. If refused, the applicant may file a litigation application, a request for leave to judicially review that decision in Federal Court. If leave is granted, the case proceeds to a full hearing and the written court decision is published publicly.
+When a person applies for a visa or permanent residency in Canada, IRCC first issues an inadmissibility decision under A34(1)[^3]. If refused, the applicant may file a litigation application, a request for leave to judicially review that decision in Federal Court. If leave is granted, the case proceeds to a full hearing and the written court decision is published publicly.
 
-[^4]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
-
-[^5]: 34 (1): A permanent resident or a foreign national is inadmissible on security grounds for
+[^3]: A34 (1): A permanent resident or a foreign national is inadmissible on security grounds
 
 To reconstruct this journey, we worked with three complementary datasets:
 
--   **A34(1)**[^6] Refusals Dataset (2019–2024): IRCC’s internal records of refusals by country, inadmissibility[^7] grounds, and status. It captures every applicant deemed inadmissible.
+-   **A34(1)** Refusals Dataset (2019–2024): IRCC’s internal records of refusals by country, inadmissibility grounds, and status. It captures every applicant deemed inadmissible.
 -   **Litigation Applications Dataset (2018–2023)**: Federal Court filings detailing leave requests, case types, and decision offices. It shows who challenged their refusal and at what stage.
--   **Refugee Law Lab Legal Text Dataset (2001–2024)**: The full text of Federal Court ( decisions, used for our NLP analysis. This bulk open-access legal text dataset is publicly available via the Refugee Law Lab on Hugging Face @huggingface.
+-   **Refugee Law Lab Legal Text Dataset (2001–2024)**: The full text of Federal Court ( decisions, used for our NLP analysis). This bulk open-access legal text dataset is publicly available via the Refugee Law Lab on Hugging Face @huggingface.
 
-[^6]: **34 (1): A permanent resident or a foreign national is inadmissible on security grounds for**
-
-[^7]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
 
 By linking these sources, we can follow cases from the point of refusal through the leave application process to the ultimate court ruling. This enables end-to-end transparency and deeper insights into systemic patterns.
 
@@ -85,14 +78,13 @@ To directly address the legal partner’s needs and highlight the most relevant 
 -   **LLM-Based Pipeline**\
     A legal text processing pipeline using **LLaMA-3** and regular expressions to extract:
     -   Judge names, decision outcomes, cities.
-    -   Case classification (e.g., inadmissibility[^8] vs. others).
+    -   Case classification (e.g., inadmissibility vs. others).
 -   **Data Quality Report**\
     A structured evaluation identifying:
     -   Missing disaggregations (e.g., country-level variables in refusals).
     -   Inconsistencies in naming, case categorization, and court metadata.
     -   Recommendations for improving future transparency and open data releases.
 
-[^8]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
 
 ## Data Science Techniques
 
@@ -112,27 +104,16 @@ This section outlines our complete data science workflow, from initial explorati
 
 #### Phase 1: Data Cleaning & Preprocessing for IRCC Datasets
 
-We began by transforming the raw A34(1)[^9] refusal records into a tidy format with one row per applicant and refusal ground. We standardized country names and outcome codes to eliminate inconsistencies, for example treating “Democratic Rep. of Congo” and “Congo, Democratic Republic of the” as the same entity, and we systematically identified and imputed missing values using rule-based logic. Because A34(1)[^10] refusals were sparse and unevenly distributed, with most countries reporting fewer than 50 cases across all years, we prioritized exploratory analysis over formal statistical inference. These steps established a consistent and reliable dataset that ready to use for next step.
+We began by transforming the raw A34(1) refusal records into a tidy format with one row per applicant and refusal ground. We standardized country names and outcome codes to eliminate inconsistencies, for example treating “Democratic Rep. of Congo” and “Congo, Democratic Republic of the” as the same entity, and we systematically identified and imputed missing values using rule-based logic. Because A34(1) refusals were sparse and unevenly distributed, with most countries reporting fewer than 50 cases across all years, we prioritized exploratory analysis over formal statistical inference. These steps established a consistent and reliable dataset that ready to use for next step.
 
-[^9]: 34 (1): A permanent resident or a foreign national is inadmissible on security grounds for
-
-[^10]: 34 (1): A permanent resident or a foreign national is inadmissible on security grounds for
 
 #### Phase 2: Exploratory Data Analysis & Story Development
 
-In the first four weeks, we conducted **exploratory data analysis (EDA)** to identify emergent patterns and generate hypotheses, revealing a sharp rise in Ukrainian inadmissibility[^11] refusals in 2024 (from 5 to 134 cases), a similar increase for Syria in 2022 (from 9 to 46 cases), and a marked uptick in **mandamus**[^12] litigation by Chinese applicants in 2023. We validated these findings with our partner to ensure they aligned with court-level observations, and from that discussion we prioritized data stories on **Geopolitical shifts** (Ukraine, Syria and China), **Anti-Black/African bias** (notably high dismissal rates[^13] for African and Caribbean countries) and **gaps in disaggregated data** by office or demographic attributes. We then iteratively refined our visualizations by applying principles from @sage-data-storyData and @storytelling-makeovers. We transformed generic chart titles into narrative-driven insights. For example, “Refusal Counts by Country” became “Ukrainian A34(1)[^14] Refusals Jump from 5 to 134 Cases (2019–2024)”, “Dismissal Rate[^15] by Continent” was reframed as “African and Caribbean Applicants See 15–20 pp Higher Dismissal Rates[^16] vs. Global Average”.
+In the first four weeks, we conducted **exploratory data analysis (EDA)** to identify emergent patterns and generate hypotheses, revealing a sharp rise in Ukrainian inadmissibility refusals in 2024 (from 5 to 134 cases), a similar increase for Syria in 2022 (from 9 to 46 cases), and a marked uptick in **mandamus**[^4] litigation by Chinese applicants in 2023. We validated these findings with our partner to ensure they aligned with court-level observations, and from that discussion we prioritized data stories on **Geopolitical shifts** (Ukraine, Syria and China), **Anti-Black/African bias** (notably high dismissal rates[^13] for African and Caribbean countries) and **gaps in disaggregated data** by office or demographic attributes. We then iteratively refined our visualizations by applying principles from @sage-data-story and @storytelling-makeovers. We transformed generic chart titles into narrative-driven insights. For example, “Refusal Counts by Country” became “Ukrainian A34(1) Refusals Jump from 5 to 134 Cases (2019–2024)”, “Dismissal Rate by Continent” was reframed as “African and Caribbean Applicants See 15–20 pp Higher Dismissal Rates vs. Global Average”.
 
-[^11]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
 
-[^12]: **Mandamus a judicial writ issued as a command to an inferior court or ordering a person to perform a public or statutory duty.**
+[^4]: **Mandamus a judicial writ issued as a command to an inferior court or ordering a person to perform a public or statutory duty.**
 
-[^13]: “Dismissal rate”: the number of cases dismissed at the Leave stage divided by the total number of Leave applications.
-
-[^14]: 34 (1): A permanent resident or a foreign national is inadmissible on security grounds for
-
-[^15]: “Dismissal rate”: the number of cases dismissed at the Leave stage divided by the total number of Leave applications.
-
-[^16]: “Dismissal rate”: the number of cases dismissed at the Leave stage divided by the total number of Leave applications.
 
 #### Phase 3: Statistical Analysis
 
@@ -140,27 +121,21 @@ To determine whether observed patterns varied significantly by country, we condu
 
 #### Phase 4: Visualization & Dashboard Design
 
-We developed an interactive dashboard with Streamlit and Plotly that guides users through **three data story pages** (A34(1) Refusals, Litigation Outcomes, Country-Level Trends) and **two interactive explorers** (Litigation and A34 (1)[^17] Refusals). To ensure accessibility for non-technical users and clear visual narratives, we embedded inline tooltips, preset filters, and in-chart caveats. Our unified interface delivers both curated insights and the freedom to dive deeper. We applied a sequential BuGn color palette from ColorBrewer @colorbrewer-sequential-bugn, adjusting the number of classes per chart. The limitation is that the scheme may not be fully color-blind friendly.
+We developed an interactive dashboard with Streamlit and Plotly that guides users through **three data story pages** (A34(1) Refusals, Litigation Outcomes, Country-Level Trends) and **two interactive explorers** (Litigation and A34 (1) Refusals). To ensure accessibility for non-technical users and clear visual narratives, we embedded inline tooltips, preset filters, and in-chart caveats. Our unified interface delivers both curated insights and the freedom to dive deeper. We applied a sequential BuGn color palette from ColorBrewer @colorbrewer-sequential-bugn, adjusting the number of classes per chart. The limitation is that the scheme may not be fully color-blind friendly.
 
-[^17]: 34 (1): A permanent resident or a foreign national is inadmissible on security grounds for
 
 ## Unstructured Text Processing & LLM Pipeline
 
 To process Canadian Federal Court decisions (2014–2024) curated by the Refugee Law Lab, we implemented a multi-stage pipeline that combines **rule-based methods** (Regex) with **large language models (LLMs)** for zero-shot classification and attribute extraction. This hybrid approach was necessary to handle the linguistic complexity and semi-structured nature of legal decisions. As shown in @fig-llm-pipeline, the pipeline consists of multiple stages, integrating both deterministic and AI-driven components.
 
-![LLM-based multi-stage pipeline for legal decision processing.](../img/llm_pipeline.jpeg){#fig-llm-pipeline}
+![LLM-based multi-stage pipeline for legal decision processing.](../../img/llm_pipeline.jpeg){#fig-llm-pipeline}
 
 #### Phase 1: Preprocessing & Filtering
 
-We first restricted our **Temporal scope** to Federal Court decisions issued between 2014 and 2024. We then **normalized language** by removing duplicate French texts whenever an English equivalent could be identified via standardized citation strings. Next, we applied **topical filters** with using regular expressions to include only cases that mention immigration-related authorities (e.g. “Citizenship and Immigration” or “MCI”) and to exclude refugee protection claims. Finally, we **focused on inadmissibility**[^18] by isolating decisions that contain terms such as “inadmissible” or “inadmissibility[^19].”
+We first restricted our **Temporal scope** to Federal Court decisions issued between 2014 and 2024. We then **normalized language** by removing duplicate French texts whenever an English equivalent could be identified via standardized citation strings. Next, we applied **topical filters** with using regular expressions to include only cases that mention immigration-related authorities (e.g. “Citizenship and Immigration” or “MCI”) and to exclude refugee protection claims. Finally, we **focused on inadmissibility** by isolating decisions that contain terms such as “inadmissible” or “inadmissibility.”
 
-[^18]: **“Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.**
 
-[^19]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
-
-#### Phase 2: Inadmissibility[^20] Classification
-
-[^20]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
+#### Phase 2: Inadmissibility Classification
 
 At this phase, we used **regular expressions** to detect explicit IRPA citations such as “s.34” or “section 36.” When decisions lacked these direct references, we applied semantic fallback patterns by looking for terms such as “espionage” or “indictable offence” to infer the relevant statutes. Any cases that remained ambiguous or unclassified were grouped under an “other” category.
 
@@ -199,25 +174,19 @@ Our work supports immigration lawyers, legal advocacy groups, and policymakers, 
 
 # Data Product and Results
 
-Our data product was designed to address the dual priorities of our legal advocacy partner: (1) identifying trends in inadmissibility[^21] and litigation that may reflect systemic bias or inconsistencies, and (2) enabling future research and policy work grounded in high-quality legal data. To meet these goals, we delivered an integrated data product composed of: a **Data Quality Report**, **Curated Data Stories**, **Interactive Exploratory Dashboards**, and a **LLM-based Pipeline** for extracting metadata from unstructured legal decisions. These components work together to create a reusable foundation for empirical legal research, evidence-based advocacy, and internal capacity-building for legal professionals.
+Our data product was designed to address the dual priorities of our legal advocacy partner: (1) identifying trends in inadmissibility and litigation that may reflect systemic bias or inconsistencies, and (2) enabling future research and policy work grounded in high-quality legal data. To meet these goals, we delivered an integrated data product composed of: a **Data Quality Report**, **Curated Data Stories**, **Interactive Exploratory Dashboards**, and a **LLM-based Pipeline** for extracting metadata from unstructured legal decisions. These components work together to create a reusable foundation for empirical legal research, evidence-based advocacy, and internal capacity-building for legal professionals.
 
-[^21]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
 
 ## Data Quality Report
 
-The **Data Quality Report** was developed to provide transparency into the structure and limitations of the two IRCC datasets, A34(1)[^22] Inadmissibility[^23] Refusals and Litigation Appplication Decisions. Rather than treating the datasets as complete, we identified critical gaps so the partner could better interpret patterns and advocate for improved data transparency from IRCC. This report is intended to help the partner challenge the evidentiary value of government data when it is incomplete or inconsistently recorded. For instance, undocumented decision offices or missing filing dates directly affect the ability to analyze regional bias or litigation timelines.
+The **Data Quality Report** was developed to provide transparency into the structure and limitations of the two IRCC datasets, A34(1) Inadmissibility Refusals and Litigation Appplication Decisions. Rather than treating the datasets as complete, we identified critical gaps so the partner could better interpret patterns and advocate for improved data transparency from IRCC. This report is intended to help the partner challenge the evidentiary value of government data when it is incomplete or inconsistently recorded. For instance, undocumented decision offices or missing filing dates directly affect the ability to analyze regional bias or litigation timelines.
 
-[^22]: 34 (1): A permanent resident or a foreign national is inadmissible on security grounds for
-
-[^23]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
 
 **Examples of Key Gaps**
 
 -   Most primary decision-office fields were missing, limiting regional analysis.
--   A34(1)[^24] refusal data lacked case counts for permanent residents in several years.
+-   A34(1) refusal data lacked case counts for permanent residents in several years.
 -   The litigation dataset omitted filing dates restricting temporal and procedural analysis.
-
-[^24]: 34 (1): A permanent resident or a foreign national is inadmissible on security grounds for
 
 While we cannot fix these omissions, documenting them is itself valuable: it allows legal stakeholders to contextualize quantitative findings and identify where further qualitative or legal review is needed. However, IRCC may not acknowledge or rectify these issues, so our product avoids overpromising and instead offers cautious interpretation of patterns based on known limitations.
 
@@ -229,15 +198,14 @@ Below are a few polished example graphs from those data stories. To explore the 
 
 **Story Overviews & Client Relevance**
 
-1.  **A34(1)**[^25] Refusals by Country and Ground
-    -   *Insight*: A34(1)(f)[^26], was the most cited inadmissibility[^27] ground, with Ukraine and Syria showing major spikes as seen in @fig-a34-refusals
+1.  **A34(1)** Refusals by Country and Ground
+    -   *Insight*: A34(1)(f)[^5], was the most cited inadmissibility ground, with Ukraine and Syria showing major spikes as seen in @fig-a34-refusals
     -   *Why it matters*: Highlights geopolitical patterns that may warrant further scrutiny.
 
-[^25]: **34 (1): A permanent resident or a foreign national is inadmissible on security grounds for**
 
-[^26]: Being a member of an organization that is believed to be involved in espionage, subversion, or terrorism.
 
-[^27]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
+[^5]: Being a member of an organization that is believed to be involved in espionage, subversion, or terrorism.
+
 
 ```{python}
 #| label: fig-a34-refusals
@@ -247,7 +215,7 @@ Below are a few polished example graphs from those data stories. To explore the 
 import pandas as pd
 import plotly.express as px
 
-ref = pd.read_csv('../data/processed/a34_1_refused_cleaned.csv')
+ref = pd.read_csv('../../data/processed/a34_1_refused_cleaned.csv')
 country_counts = ref.groupby('country')['count'].sum().sort_values(ascending=False)
 
 # Get top 5 countries
@@ -276,10 +244,10 @@ fig.show()
 ```
 
 2.  **Litigation Outcomes by Region and Country**
-    -   *Insight*: Nigeria dominated RAD[^28] appeals; Iran had a spike in visa refusals post-2020 as shown in @fig-litigation-outcomes
+    -   *Insight*: Nigeria dominated RAD[^6] appeals; Iran had a spike in visa refusals post-2020 as shown in @fig-litigation-outcomes
     -   *Why it matters*: Supports country-specific advocacy or policy submissions based on litigation profiles.
 
-[^28]: RAD is the Refugee Appeal Division of the Immigration and Refugee Board of Canada, which hears appeals of first-instance refugee decisions.
+[^6]: RAD is the Refugee Appeal Division of the Immigration and Refugee Board of Canada, which hears appeals of first-instance refugee decisions.
 
 ```{python}
 #| label: fig-litigation-outcomes
@@ -289,7 +257,7 @@ fig.show()
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
-lit = pd.read_excel("../data/raw/litigation_cases.xlsx", skiprows=5, skipfooter=7)
+lit = pd.read_excel("../../data/raw/litigation_cases.xlsx", skiprows=5, skipfooter=7)
 
 countries = {
     "People's Republic of China": "China",
@@ -416,12 +384,9 @@ While curated stories convey known patterns, exploration empowers discovery, esp
 
 **Examples**
 
--   A lawyer representing a Syrian client could use the A34(1)[^29] explorer to review trends in inadmissibility[^30] refusals.
+-   A lawyer representing a Syrian client could use the A34(1) explorer to review trends in inadmissibility refusals.
 -   A researcher could filter the litigation dashboard to compare decision outcomes for Iranian vs. Indian applicants across years.
 
-[^29]: 34 (1): A permanent resident or a foreign national is inadmissible on security grounds for
-
-[^30]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
 
 **Design Priorities**
 
@@ -429,47 +394,34 @@ While curated stories convey known patterns, exploration empowers discovery, esp
 -   Hover tooltips and annotations for interpretability: mousing over map regions or bars reveals definitions (e.g., “LIT Litigation Count”) and flags low-volume cells
 -   Filters for key attributes (country, year, ground, etc.): preset defaults for country, year, and case type prevent missteps, with “Clear All Filters” for full exploration.
 
-![A snapshot of the Interactive Dashboard](../img/dashboard.png){#fig-dash-board}
+![A snapshot of the Interactive Dashboard](../../img/dashboard.png){#fig-dash-board}
 
 **Limitations & Risks**\
 While exploration is valuable, it can also lead to misinterpretation of noisy or sparse data. To mitigate this, we embedded tooltips and footnotes throughout the dashboard to warn users of known data quality concerns. We also advise our partner to treat these tools as starting points for inquiry, not sources of final proof.
 
 ## LLM-Based Metadata Extraction Pipeline
 
-As a final component, we built a local LLM pipeline using LLaMA 3 (via Ollama) to extract structured metadata from unstructured court decisions—supporting long-term capacity building by allowing the partner to re-run the workflow whenever new decisions are released. The same pipeline can filter and extract inadmissibility[^31] cases across any year and is adaptable to Federal Court, Federal Court of Appeal, or Supreme Court decisions by simply adjusting line numbers or prompt templates. We chose LLMs because manual extraction isn’t scalable and rule-based approaches can’t handle legal-language complexity, and our pipeline reliably pulls out key attributes like decision outcome, judge name, and hearing location even from unstructured text. Its advantages include timely updates to litigation datasets, \~85 % accuracy in partner validation, and generalizability across years and document formats. Its drawbacks are non-determinism without careful prompt engineering and seeding, hardware-dependent reproducibility, and occasional failures in edge cases (e.g., multiple-judge panels or ambiguous outcomes).
+As a final component, we built a local LLM pipeline using LLaMA 3 (via Ollama) to extract structured metadata from unstructured court decisions—supporting long-term capacity building by allowing the partner to re-run the workflow whenever new decisions are released. The same pipeline can filter and extract inadmissibility cases across any year and is adaptable to Federal Court, Federal Court of Appeal, or Supreme Court decisions by simply adjusting line numbers or prompt templates. We chose LLMs because manual extraction isn’t scalable and rule-based approaches can’t handle legal-language complexity, and our pipeline reliably pulls out key attributes like decision outcome, judge name, and hearing location even from unstructured text. Its advantages include timely updates to litigation datasets, \~85 % accuracy in partner validation, and generalizability across years and document formats. Its drawbacks are non-determinism without careful prompt engineering and seeding, hardware-dependent reproducibility, and occasional failures in edge cases (e.g., multiple-judge panels or ambiguous outcomes).
 
-[^31]: “Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.
 
 ## Future Improvements and Alternatives
 
-In future iterations, we plan to enhance the dashboard with automated summaries and trend annotations that surface key shifts without manual interpretation, add hoverable definitions for complex legal terms such as “mandamus[^32]” or “RAD[^33] decisions” to support non-experts, and refine our LLM prompt design by enforcing explicit output templates and structured responses to reduce nondeterminism and prompt sensitivity in metadata extraction.
+In future iterations, we plan to enhance the dashboard with automated summaries and trend annotations that surface key shifts without manual interpretation, add hoverable definitions for complex legal terms such as “mandamus” or “RAD decisions” to support non-experts, and refine our LLM prompt design by enforcing explicit output templates and structured responses to reduce nondeterminism and prompt sensitivity in metadata extraction.
 
-[^32]: Mandamus a judicial writ issued as a command to an inferior court or ordering a person to perform a public or statutory duty.
-
-[^33]: RAD is the Refugee Appeal Division of the Immigration and Refugee Board of Canada, which hears appeals of first-instance refugee decisions.
 
 # Conclusions & Recommendations
 
 ## Recalling the Problem & Solution
 
-Our partner challenged us with this question:***How can data science tools uncover patterns in Canadian inadmissibility***[^34] and litigation to help legal practitioners, advocates, and policymakers promote transparency and fairness? To meet that need, we built a layered data product combining a **Data Quality Report, Curated Data Stories, Interactive Exploratory Dashboards**, and an **LLM-based extraction pipeline**. At the **case level,** the LLM pipeline transforms unstructured Federal Court decisions into structured metadata (outcome, judge, location), enabling broad pattern analysis. Then curated stories surface geopolitical shifts (e.g., Ukraine, Syria) and systemic disparities in refusal and litigation rates; and the data quality report highlights gaps (e.g., missing office or refusal-ground details) that can inform FOI requests and policy dialogue with IRCC. This integrated approach balances narrative clarity with exploratory flexibility and was refined continuously through partner feedback.
-
-[^34]: ***“Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.***
+Our partner challenged us with this question:***How can data science tools uncover patterns in Canadian inadmissibility*** and litigation to help legal practitioners, advocates, and policymakers promote transparency and fairness? To meet that need, we built a layered data product combining a **Data Quality Report, Curated Data Stories, Interactive Exploratory Dashboards**, and an **LLM-based extraction pipeline**. At the **case level,** the LLM pipeline transforms unstructured Federal Court decisions into structured metadata (outcome, judge, location), enabling broad pattern analysis. Then curated stories surface geopolitical shifts (e.g., Ukraine, Syria) and systemic disparities in refusal and litigation rates; and the data quality report highlights gaps (e.g., missing office or refusal-ground details) that can inform FOI requests and policy dialogue with IRCC. This integrated approach balances narrative clarity with exploratory flexibility and was refined continuously through partner feedback.
 
 ## Key Findings
 
--   **Inadmissibility**[^35] refusals showed major spikes for Ukraine (2024) and Syria (2022), primarily under s.34(1)(f)[^36], with higher rates for permanent residents.
--   **Litigation case volumes** rose significantly post 2021, with country-specific trends, Nigeria in RAD[^37] appeals, Iran in visa refusal challenges.
--   **A34**[^38] refusals and litigation outcomes differ by country, supported by chi-square tests, though confounding factors cannot be ruled out.
+-   **Inadmissibility** refusals showed major spikes for Ukraine (2024) and Syria (2022), primarily under s.34(1)(f), with higher rates for permanent residents.
+-   **Litigation case volumes** rose significantly post 2021, with country-specific trends, Nigeria in RAD appeals, Iran in visa refusal challenges.
+-   **A34(1)** refusals and litigation outcomes differ by country, supported by chi-square tests, though confounding factors cannot be ruled out.
 -   **Legal text extraction** using LLMs achieved \~85% accuracy in pilot tests, enabling scalable, semi-automated analysis.
 
-[^35]: **“Inadmissibility” refers to the legal grounds under IRPA that render a foreign national or permanent resident ineligible to enter or remain in Canada.**
-
-[^36]: Being a member of an organization that is believed to be involved in espionage, subversion, or terrorism.
-
-[^37]: RAD is the Refugee Appeal Division of the Immigration and Refugee Board of Canada, which hears appeals of first-instance refugee decisions.
-
-[^38]: **34 (1): A permanent resident or a foreign national is inadmissible on security grounds for**
 
 ## Limitations & Recommendations
 
