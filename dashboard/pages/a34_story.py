@@ -39,7 +39,7 @@ if not ref.empty:
     st.download_button(
         label="Download Refusal Dataset (CSV)",
         data=csv_data,
-        file_name="a34_1_refused_cleaned.csv",
+        file_name="a34_1_refusal.csv",
         mime="text/csv"
     )
 else:
@@ -57,7 +57,9 @@ st.markdown("""
 st.info("""
         **How to Read This Chart**:
         
-        This bar chart displays the total number of immigration refusal cases categorized by country. The height of each bar represents the cumulative refusals for that country over the entire period analyzed. This helps identify countries with the highest refusal counts.
+        - This bar chart displays the total number of immigration refusal cases categorized by country. 
+        - The height of each bar represents the cumulative refusals for that country over the entire period analyzed. 
+        - This helps identify countries with the highest refusal counts.
 """)
 
 country_counts = ref.groupby("country")["count"].sum().nlargest(10).reset_index()
@@ -91,7 +93,8 @@ st.markdown("""
 st.info("""
         **How to Read This Heatmap**:
 
-        This heatmap shows yearly refusal counts for the top five countries with the most refusals. Each cell’s color intensity corresponds to the number of refusals in that year for the respective country, allowing you to observe trends and spikes over time.
+        - This heatmap shows yearly refusal counts for the top five countries with the most refusals. 
+        - Each cell’s color intensity corresponds to the number of refusals in that year for the respective country, allowing you to observe trends and spikes over time.
 """)
 
 
@@ -152,7 +155,9 @@ grounds_description = {
 st.info("""
         **How to Read This Treemap**:
 
-        The treemap visualizes the distribution of refusal cases by country for the top 5 countries and specific legal grounds for refusal under section A34(1). The size of each rectangle reflects the volume of refusals, while color differentiates countries. Hover over sections for detailed descriptions of refusal grounds.
+        - The treemap visualizes the distribution of refusal cases by country for the top 5 countries and specific legal grounds for refusal under section A34(1). 
+        - The size of each rectangle reflects the volume of refusals, while color differentiates countries. 
+        - Hover over sections for detailed descriptions of refusal grounds.
 """)
 
 # Add descriptions for hover tooltips
