@@ -63,7 +63,7 @@ Launch a complete dashboard with 3 curated Data Stories + 2 interactive explorer
 # full dashboard (3 stories + 2 explorers)
 streamlit run dashboard/pages/index.py
 ```
-You can find our dashboard deployed [here](https://public-transparency-for-immigration-law-in-canada.streamlit.app/)
+You can find our dashboard deployed [here](https://irccdata.streamlit.app/)
 
 #### Option 2: Run Individual Modules
 
