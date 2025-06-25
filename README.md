@@ -1,13 +1,15 @@
 # Public-Transparency-for-Immigration-Law-Canada
 
-**Authors**: Ismail (Husain) Bhinderwala, Jessica Yu, Ke Gao, Yichun Liu **Project Type**: Capstone Project\
-**Affiliation**: University of British Columbia, Heron Law Offices and AIMICI **Duration**: April 28 – June 25, 2025
+**Authors**: Ismail (Husain) Bhinderwala, Jessica Yu, Ke Gao, Yichun Liu 
+
+**Affiliation**: University of British Columbia, Heron Law Offices and AIMICI 
+**Duration**: April, 2025 – June, 2025
 
 ------------------------------------------------------------------------
 
 # Welcome!
 
-🌟 We're so glad you're here! Thank you for visiting the Public-Transparency-for-Immigration-Law-Canada project repository.
+🌟 We're so glad you're here! Thank you for visiting the our project repository.
 
 🌟 This README is a friendly guide to everything about the project. Whether you're here to explore what our dashboard offers, learn about our mission, or find ways to contribute, you've come to the right place! 🥳
 
@@ -15,7 +17,7 @@
 
 This project investigates patterns in immigration inadmissibility decisions in Canada Using structured datasets from **Immigration, Refugees and Citizenship Canada (IRCC)** and unstructured [**federal court decision texts**](https://huggingface.co/datasets/refugee-law-lab/canadian-legal-data), we aim to uncover insights into legal trends, systemic disparities, and judicial decision-making.
 
-The project leverages exploratory data analysis, statistical inference and natural language processing. The final product will be a **public-facing interactive dashboard** built using **Python and Dash**, designed to make these datasets interpretable for legal professionals, policymakers, and the public.
+The project leverages exploratory data analysis, statistical inference and natural language processing. The final product will be a **public-facing interactive dashboard** built using **Python and Streamlit**, designed to make these datasets interpretable for legal professionals, policymakers, and the public.
 
 ---
 ## Dependencies
@@ -55,46 +57,67 @@ This repository contains several Streamlit pages located in `dashboard/pages/`. 
 
 #### Option 1: Full Dashboard (All in One)
 
-Launch a complete dashboard with 3 curated Data Stories + 2 interactive explorers:
+Launch a complete dashboard with 3 curated Data Stories + 2 interactive explorers from the **project root directory** using the following command in the terminal where the conda enivornment is active.
 
 ``` bash
 # full dashboard (3 stories + 2 explorers)
-cd dashboard/pages/
-streamlit run index.py
+streamlit run dashboard/pages/index.py
 ```
+You can find our dashboard deployed [here](https://public-transparency-for-immigration-law-in-canada.streamlit.app/)
 
 #### Option 2: Run Individual Modules
 
-If you want to launch just one page, you can run any of the following scripts:
+If you want to launch just one page, you can run any of the following scripts from the **project root directory**.
 
 | Script                      | What it shows                                                         | Command                                   |
 |-------------------|--------------------------------|---------------------|
-| `a34_story.py`              | A34(1) Refusals interactive explorer                                  | `streamlit run a34_story.py`              |
-| `africa_vs_non_africa.py`   | Litigation Outcomes story by continent-level (Africa vs. Non-Africa)  | `streamlit run africa_vs_non_africa.py`   |
-| `litigation_dashboard.py`   | Litigation Outcomes story by country-level                            | `streamlit run litigation_dashboard.py`   |
-| `litigation_interactive.py` | Litigation Applications interactive explorer                          | `streamlit run litigation_interactive.py` |
+| `a34_story.py`              | A34(1) Refusals interactive explorer                                  | `streamlit run dashboard/pages/a34_story.py`              |
+| `africa_vs_non_africa.py`   | Litigation Outcomes story by continent-level (Africa vs. Non-Africa)  | `streamlit run dashboard/pages/africa_vs_non_africa.py`   |
+| `litigation_dashboard.py`   | Litigation Outcomes story by country-level                            | `streamlit run ldashboard/pages/itigation_dashboard.py`   |
+| `litigation_interactive.py` | Litigation Applications interactive explorer                          | `streamlit run dashboard/pages/litigation_interactive.py` |
 
 A screenshot of our dashboard: ![](img/dashboard.png)
+
+## Running the LLM Pipeline
+
+From the **project root directory** first navigate to `data_product` folder by running the following command in the terminal:
+```bash
+cd data_product/
+```
+
+Then run the `llm_processing_pipeline.ipynb` in VS Code or JupyterLab
+
+## Data Quality report
+
+From the **project root directory** first navigate to `data_product/data_quality_report/` folder by running the following command in the terminal:
+```bash
+cd data_product/data_quality_report/
+```
+
+Then to generate the Data Quality Report in pdf, run this command in the terminal:
+```bash
+quarto render data_quality_report.qmd --to pdf
+```
 
 ## Rendering the Report
 
 From the **project root directory**, run the following commands:
 
-#### Preview the report in a browser:
+#### Preview the Final Report in a browser:
 
-``` bash
-quarto preview report/proposal_report.qmd
+```bash
+quarto preview report/final_report/final_report.qmd
 
 To generate final HTML output:
 
 ```bash
-quarto render report/proposal_report.qmd --to html
+quarto render report/final_report/final_report.qmd --to html
 ```
 
 To generate final PDF output:
 
 ``` bash
-quarto render report/proposal_report.qmd --to pdf
+quarto render report/final_report/final_report.qmd --to pdf
 ```
 
 ------------------------------------------------------------------------
