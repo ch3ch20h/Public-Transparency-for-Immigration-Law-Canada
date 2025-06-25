@@ -3,7 +3,7 @@ import streamlit as st
 st.set_page_config(layout="wide")
 
 # Dashboard Introduction
-st.title("🇨🇦 Immigration Litigation and Refusal Insights Dashboard")
+st.title("Immigration Litigation and Refusal Insights Dashboard")
 st.markdown("""
 Welcome to the Immigration Insights Dashboard. This dashboard presents data-driven stories and interactive visualizations based on publicly available datasets from Canadian immigration authorities. It is designed to help users explore patterns in **application refusals** and **litigation outcomes**, and to investigate potential regional disparities or systemic trends.
 
