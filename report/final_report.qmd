@@ -106,6 +106,10 @@ We used **Conda** to create a reproducible environment for all stakeholders. Con
 
 To process Canadian Federal Court decisions (2014–2024) curated by the Refugee Law Lab, we implemented a multi-stage pipeline that combines **rule-based methods** (Regex) with **large language models (LLMs)** for zero-shot classification and attribute extraction. This hybrid approach was necessary to handle the linguistic complexity and semi-structured nature of legal decisions.
 
+![LLM-based multi-stage pipeline for legal decision processing.](../img/llm_pipeline.jpeg){#fig-llm-pipeline}
+
+As shown in @fig-llm-pipeline, the pipeline consists of multiple stages, integrating both deterministic and AI-driven components.
+
 ### Preprocessing & Filtering
 
 - **Temporal scope**: Retained decisions from 2014 to 2024.
@@ -250,16 +254,175 @@ Curated stories serve advocacy needs more effectively than open-ended plots: the
 **Story Overviews & Client Relevance**
 
 1. **A34(1) Refusals by Country and Ground**  
-    - *Insight*: A34(1)(f), was the most cited inadmissibility ground, with Ukraine, Syria, and Iran showing major spikes.  
+    - *Insight*: A34(1)(f), was the most cited inadmissibility ground, with Ukraine and Syria showing major spikes as seen in @fig-a34-refusals
     - *Why it matters*: Highlights geopolitical patterns that may warrant further scrutiny.
 
+```{python}
+#| label: fig-a34-refusals
+#| fig-cap: "Heatmap of A34(1) refusals by country and year (Top 5 countries)."
+#| fig-align: center
+
+import pandas as pd
+import plotly.express as px
+
+ref = pd.read_csv('../data/processed/a34_1_refused_cleaned.csv')
+country_counts = ref.groupby('country')['count'].sum().sort_values(ascending=False)
+
+# Get top 5 countries
+top_countries = country_counts.head(5).index.tolist()
+df_top = ref[ref['country'].isin(top_countries)]
+
+# Create pivot table
+heatmap_data = df_top.pivot_table(index='country', columns='year', values='count', aggfunc='sum', fill_value=0)
+
+# Generate heatmap
+fig = px.imshow(
+    heatmap_data,
+    text_auto=True,
+    color_continuous_scale='Blues',
+    aspect='auto',
+    labels=dict(x="Year", y="Country", color="Count")
+)
+
+fig.update_layout(
+    title_x=0.5,
+    font=dict(size=14),
+    xaxis=dict(side='top')
+)
+
+fig.show()
+```
+
+
 2. **Litigation Outcomes by Region and Country**  
-   - *Insight*: Nigeria dominated RAD appeals; Iran had a spike in visa refusals post-2020.  
+   - *Insight*: Nigeria dominated RAD appeals; Iran had a spike in visa refusals post-2020 as shown in @fig-litigation-outcomes
    - *Why it matters*: Supports country-specific advocacy or policy submissions based on litigation profiles.
 
+```{python}
+#| label: fig-litigation-outcomes
+#| fig-cap: "Litigation outcomes by case type and country for selected regions (China, India, Iran, Nigeria)."
+#| fig-align: center
+
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+
+lit = pd.read_excel("../data/raw/litigation_cases.xlsx", skiprows=5, skipfooter=7)
+
+countries = {
+    "People's Republic of China": "China",
+    "India": "India",
+    "Iran": "Iran",
+    "Nigeria": "Nigeria"
+}
+valid_case_types = ["RAD Decisions", "Visa Officer Refusal", "Mandamus"]
+
+# Use pastel colors
+color_palette = px.colors.qualitative.Pastel
+color_map = dict(zip(valid_case_types, color_palette[:len(valid_case_types)]))
+
+# Prepare subplot: 2 rows (summary + bar) and 4 columns (per country)
+fig = make_subplots(
+    rows=2, cols=4,
+    shared_xaxes=False,
+    shared_yaxes=True,
+    vertical_spacing=0.1,
+    horizontal_spacing=0.03,
+    subplot_titles=list(countries.values()),
+    row_heights=[0.2, 0.8]
+)
+
+for col_idx, (country_key, country_name) in enumerate(countries.items(), start=1):
+    df_country = lit[lit["Country of Citizenship"] == country_key]
+    df_country = df_country[df_country["LIT Case Type Group Desc"].isin(valid_case_types)]
+
+    grouped = df_country.groupby(
+        ["LIT Leave Decision Date - Year", "LIT Case Type Group Desc"]
+    )["LIT Litigation Count"].sum().reset_index()
+
+    pivot_df = grouped.pivot(
+        index="LIT Leave Decision Date - Year",
+        columns="LIT Case Type Group Desc",
+        values="LIT Litigation Count"
+    ).fillna(0).sort_index()
+
+    total_counts = pivot_df.sum()
+    total_percent = (total_counts / total_counts.sum() * 100).round(2)
+
+    # Row 1: Summary bar
+    for case_type in valid_case_types:
+        fig.add_trace(go.Bar(
+            y=["Total"],
+            x=[total_percent.get(case_type, 0)],
+            name=case_type,
+            orientation='h',
+            text=[f"{total_percent.get(case_type, 0)}%"],
+            textposition='outside',
+            textfont=dict(color='black'),
+            marker=dict(color=color_map[case_type]),
+            showlegend=(col_idx == 1)
+        ), row=1, col=col_idx)
+
+    # Row 2: Per-year stacked bars
+    for case_type in valid_case_types:
+        fig.add_trace(go.Bar(
+            y=pivot_df.index.astype(str),
+            x=pivot_df[case_type],
+            name=case_type,
+            orientation='h',
+            text=pivot_df[case_type],
+            textposition='outside',
+            textfont=dict(color='black'),
+            marker=dict(color=color_map[case_type]),
+            showlegend=False
+        ), row=2, col=col_idx)
+
+    fig.update_xaxes(visible=False, row=1, col=col_idx)
+    fig.update_xaxes(visible=False, row=2, col=col_idx)
+    fig.update_yaxes(autorange='reversed', row=2, col=col_idx)
+    fig.update_yaxes(title='', row=1, col=col_idx)
+    if col_idx != 1:
+        fig.update_yaxes(showticklabels=False, row=2, col=col_idx)
+
+fig.update_layout(
+    barmode='stack',
+    plot_bgcolor='white',
+    title_x=0.5,
+    font=dict(size=14),
+    legend=dict(
+        title="Case Types",
+        orientation="h",
+        yanchor="bottom",
+        y=-0.1,
+        xanchor="center",
+        x=0.5,
+        font=dict(size=14)
+    )
+)
+
+fig.show()
+```
+
+
 3. **Litigation Trends Over Time**  
-   - *Insight*: Steady increase in federal litigation since 2018, dip in 2020 (COVID), then strong rebound.  
+   - *Insight*: Steady increase in federal litigation since 2018, dip in 2020 (COVID), then strong rebound as seen in @fig-litigation-trends
    - *Why it matters*: May reflect broader procedural shifts, backlogs, or access-to-justice barriers.
+
+```{python}
+#| label: fig-litigation-trends
+#| fig-cap: "Trend in federal court litigation counts by year."
+#| fig-align: center
+
+litigation_by_year = lit.groupby("LIT Leave Decision Date - Year")["LIT Litigation Count"].sum().reset_index()
+
+fig = px.line(
+    litigation_by_year,
+    x="LIT Leave Decision Date - Year",
+    y="LIT Litigation Count",
+    markers=True
+)
+
+fig.show()
+```
 
 ## Interactive Exploratory Dashboards
 
@@ -279,6 +442,11 @@ While curated stories convey known patterns, exploration empowers discovery, esp
 - Clean layout with minimal cognitive load  
 - Hover tooltips and annotations for interpretability  
 - Filters for key attributes (country, year, ground, etc.)
+
+You can see the snapshot of the dashboard in @fig-dash-board with the above mentioned design priorities being shown.
+
+![A snapshot of the Interactive Dashboard](../img/dashboard.png){#fig-dash-board}
+
 
 **Limitations & Risks**  
 While exploration is valuable, it can also lead to misinterpretation of noisy or sparse data. To mitigate this, we embedded tooltips and footnotes throughout the dashboard to warn users of known data quality concerns. We also advise our partner to treat these tools as starting points for inquiry, not sources of final proof.
